@@ -1,0 +1,16 @@
+INSERT INTO bookmarks (id, title, url, created_at) VALUES
+('Google', 'https://www.google.com', current_timestamp),
+('YouTube', 'https://www.youtube.com', current_timestamp),
+('Facebook', 'https://www.facebook.com', current_timestamp),
+('Twitter', 'https://www.twitter.com', current_timestamp),
+('Instagram', 'https://www.instagram.com', current_timestamp),
+('LinkedIn', 'https://www.linkedin.com', current_timestamp),
+('Reddit', 'https://www.reddit.com', current_timestamp),
+('Stack Overflow', 'https://stackoverflow.com', current_timestamp),
+('GitHub', 'https://github.com', current_timestamp),
+('Medium', 'https://medium.com', current_timestamp),
+('Netflix', 'https://www.netflix.com', current_timestamp),
+('Amazon', 'https://www.amazon.com', current_timestamp),
+('Wikipedia', 'https://www.wikipedia.org', current_timestamp),
+('Kakao', 'https://www.kakao.com', current_timestamp),
+('Naver', 'https://www.naver.com', current_timestamp);
