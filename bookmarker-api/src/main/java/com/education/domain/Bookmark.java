@@ -8,12 +8,12 @@ import lombok.Setter;
 
 import java.time.Instant;
 
+@Entity
+@Table(name = "bookmarks")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "bookmarks")
 public class Bookmark {
     @Id
     @SequenceGenerator(name = "bm_id_seq_gen", sequenceName = "bm_id_seq")
