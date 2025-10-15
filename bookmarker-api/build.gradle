@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.6'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.google.cloud.tools.jib' version '3.4.5'
+	// id 'com.bmuschko.docker-spring-boot-application' version '9.4.0'
 }
 
 group = 'com.education'
@@ -47,6 +49,25 @@ dependencies {
 	testImplementation 'org.testcontainers:postgresql'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+// Buildpacks을 통한 이미지 배포
+// dockerfile 필요 x, springboot의 buildpack을 사용해 이미지 생성함
+//bootBuildImage {
+//	imageName = "mrk0607/${project.name}:3.0"   // Docker 이미지 이름/태그
+//}
+
+// Docker Gradle plugin 설정
+//docker {
+//	springBootApplication {
+//		baseImage = 'eclipse-temurin:21-jdk-jammy'
+//		images = ['mrk0607/bookmarker-api:2.0']
+//		// Maven의 dockerFileDir과 동일 하지만 플러그인으로 별도 지정 필요 x
+//		// dockerFile = file("${projectDir}/Dockerfile")
+//	}
+//}
+// Docker 이미지 빌드 전에 bootJar 실행
+//tasks.named('dockerBuildImage') {
+//	dependsOn bootJar
+//}
 
 tasks.named('test') {
 	useJUnitPlatform()
