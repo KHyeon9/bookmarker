@@ -40,7 +40,9 @@ jobs:
 
       # 4️. Gradle 빌드
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build
 
       # 5️. Docker 이미지 빌드 및 푸시 (main 브랜치 전용)
       - name: Build and Publish Docker Image
