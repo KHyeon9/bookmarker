@@ -1,8 +1,10 @@
 package com.education.service;
 
+import com.education.dto.BookmarkDto;
 import com.education.dto.BookmarksDto;
 import com.education.repository.BookmarkRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,6 +23,15 @@ public class BookmarkService {
         int pageNo = page < 1 ? 0 : page - 1;
         Pageable pageable =
                 PageRequest.of(pageNo, 10, Sort.Direction.DESC, "createdAt");
-        return new BookmarksDto(bookmarkRepository.findAll(pageable));
+        // return new BookmarksDto(bookmarkRepository.findAll(pageable));
+        // 엔티티와 직접적인 연결을 끊기 위한 dto 변경
+        // Page<BookmarkDto> bookmarkPage =
+        //         bookmarkRepository
+        //                 .findAll(pageable)
+        //                 .map(BookmarkDto::fromEntity);
+        Page<BookmarkDto> bookmarkPage =
+                bookmarkRepository
+                    .findByBookmarks(pageable);
+        return new BookmarksDto(bookmarkPage);
     }
 }
