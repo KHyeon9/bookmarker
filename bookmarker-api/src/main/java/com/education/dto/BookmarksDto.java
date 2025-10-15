@@ -1,6 +1,5 @@
 package com.education.dto;
 
-import com.education.domain.Bookmark;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class BookmarksDto {
-    private List<Bookmark> data; // 조회된 북마크 집합
+    private List<BookmarkDto> data; // 조회된 북마크 집합
     private long totalElements;
     private int totalPages;
     private int currentPage;
@@ -23,7 +22,7 @@ public class BookmarksDto {
     private boolean hasNext;
     private boolean hasPrevious;
 
-    public BookmarksDto(Page<Bookmark> bookmarksPage) {
+    public BookmarksDto(Page<BookmarkDto> bookmarksPage) {
         this.setData(bookmarksPage.getContent());
         this.setTotalElements(bookmarksPage.getTotalElements());
         this.setTotalPages(bookmarksPage.getTotalPages());
