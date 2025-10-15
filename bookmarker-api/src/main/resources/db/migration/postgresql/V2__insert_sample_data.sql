@@ -1,4 +1,4 @@
-INSERT INTO bookmarks (id, title, url, created_at) VALUES
+INSERT INTO bookmarks (title, url, created_at) VALUES
 ('Google', 'https://www.google.com', current_timestamp),
 ('YouTube', 'https://www.youtube.com', current_timestamp),
 ('Facebook', 'https://www.facebook.com', current_timestamp),
