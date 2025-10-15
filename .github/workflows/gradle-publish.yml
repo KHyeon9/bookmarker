@@ -1,44 +1,55 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
-# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
-
-name: Gradle Package
-
+name: Build
+# 어떤 브랜치에서든 push 시 실행
 on:
-  release:
-    types: [created]
+  push:
+    branches: [ "**" ]
 
 jobs:
-  build:
-
+  build-bookmarker-api:
+    # ubuntu에서 실행
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    # bookmarker-api 폴더 안에서 실행되도록 설정
+    defaults:
+      run:
+        working-directory: ./bookmarker-api
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
+      # 1️. 코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+      # 2.⃣ JDK 21 설치
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
 
-    - name: Build with Gradle
-      run: ./gradlew build
+      # 3️. Gradle 캐시 설정
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          # 캐시 경로
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          # 접두사 - os 별 캐시 구분 - gradle 설정 파일 해시 및 build.gradle이나 wrapper가 바뀌면 새 캐시 생성
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          # 정확한 캐시기 없을시 os단위로 비슷한 캐시 사용
+          restore-keys: gradle-${{ runner.os }}-
 
-    # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
-    # the publishing section of your build.gradle
-    - name: Publish to GitHub Packages
-      run: ./gradlew publish
-      env:
-        USERNAME: ${{ github.actor }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # 4️. Gradle 빌드
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
+      # 5️. Docker 이미지 빌드 및 푸시 (main 브랜치 전용)
+      - name: Build and Publish Docker Image
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          ./gradlew jib \
+            --image=${{ secrets.DOCKER_USERNAME }}/bookmarker-api:latest \
+            -Djib.to.auth.username=${{ secrets.DOCKER_USERNAME }} \
+            -Djib.to.auth.password=${{ secrets.DOCKER_PASSWORD }}
+        env:
+          DOCKER_BUILDKIT: 1
+          DOCKER_CLI_EXPERIMENTAL: enabled
