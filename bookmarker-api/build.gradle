@@ -49,6 +49,21 @@ dependencies {
 	testImplementation 'org.testcontainers:postgresql'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+// Jib 설정
+jib {
+	to {
+		image = "mrk0607/${project.name}:3.0"
+		auth {
+			username = 'mrk0607'
+			password = '도커 액세스 토큰'
+		}
+	}
+	container {
+		mainClass = 'com.education.BookmarkerApiApplication' // 스프링부트 main 클래스
+		ports = ['8080'] // 컨테이너 노출 포트
+	}
+}
+
 // Buildpacks을 통한 이미지 배포
 // dockerfile 필요 x, springboot의 buildpack을 사용해 이미지 생성함
 //bootBuildImage {
