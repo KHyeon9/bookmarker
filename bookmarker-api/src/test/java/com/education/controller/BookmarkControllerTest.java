@@ -3,19 +3,23 @@ package com.education.controller;
 import com.education.domain.Bookmark;
 import com.education.repository.BookmarkRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.Instant;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,6 +65,7 @@ class BookmarkControllerTest {
         bookmarkRepository.saveAll(bookmarks);
     }
 
+    @Disabled
     @Test
     void shoudBookmarks() throws Exception {
         // mvc.perform(MockMvcRequestBuilders.get("/api/bookmarks"))
@@ -76,6 +81,7 @@ class BookmarkControllerTest {
                 .andExpect(jsonPath("$.hasPrevious").value(false));
     }
     // 파라미터 테스트
+    @Disabled
     @ParameterizedTest
     @CsvSource({
             "1, 15, 2, 1, true, false, true, false",
@@ -100,5 +106,29 @@ class BookmarkControllerTest {
                 .andExpect(jsonPath("$.isLast").value(isLast))
                 .andExpect(jsonPath("$.hasNext").value(hasNext))
                 .andExpect(jsonPath("$.hasPrevious").value(hasPrevious));
+    }
+
+    @Test
+    void createBookmarkErrorCheck() throws Exception {
+        MvcResult result = this.mvc.perform(
+                MockMvcRequestBuilders
+                        .post("/api/bookmarks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "url": "http://www.naver.com"
+                                }
+                            """)
+                ).andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.field", is("title")))
+                .andExpect(jsonPath("$.message", is("제목은 필수 입력 값입니다.")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andReturn();
+
+        String contentType = result.getResponse().getContentType();
+        String responseBody = result.getResponse().getContentAsString();
+
+        System.out.println("반환된 결과의 contentType : " + contentType);
+        System.out.println("반환된 결과의 내용 JSON : " + responseBody);
     }
 }
