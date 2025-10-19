@@ -5,7 +5,9 @@ on:
     branches: [ "**" ]
 
 jobs:
+  # api action 설정
   build-bookmarker-api:
+    name: Build bookmarker-api
     # ubuntu에서 실행
     runs-on: ubuntu-latest
     # bookmarker-api 폴더 안에서 실행되도록 설정
@@ -18,7 +20,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2.⃣ JDK 21 설치
+      # 2. JDK 21 설치
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -49,9 +51,47 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           ./gradlew jib \
-            --image=${{ secrets.DOCKER_USERNAME }}/bookmarker-api:latest \
+            --image=${{ secrets.DOCKER_USERNAME }}/bookmarker-api:5.0 \
             -Djib.to.auth.username=${{ secrets.DOCKER_USERNAME }} \
             -Djib.to.auth.password=${{ secrets.DOCKER_PASSWORD }}
         env:
           DOCKER_BUILDKIT: 1
           DOCKER_CLI_EXPERIMENTAL: enabled
+  # ui action 설정
+  build-bookmarker-ui:
+    name: Build bookmarker-ui
+    # ubuntu에서 실행
+    runs-on: ubuntu-latest
+    # bookmarker-api 폴더 안에서 실행되도록 설정
+    defaults:
+      run:
+        working-directory: ./bookmark-ui-nextjs
+
+    steps:
+      # 1️. 코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. node 설치
+      - name: Set up Node.js 22.20.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.20.0
+      # 3. 의존성 설치 (npm ci)
+      - name: Install dependencies
+        run: npm ci
+      # 4. env 파일 생성
+      - name: Create .env.local
+        run: |
+          echo "NEXT_PUBLIC_CLIENT_SIDE_API_BASE_URL=${{ secrets.NEXT_PUBLIC_CLIENT_SIDE_API_BASE_URL }}"> .env.local
+          echo "SERVER_SIDE_API_BASE_URL=${{ secrets.SERVER_SIDE_API_BASE_URL }}"> .env.local
+      # 4. Next.js 빌드
+      - name: Build
+        run: npm run build
+      # 5️. Docker 이미지 빌드 및 푸시 (main 브랜치 전용)
+      - name: Build and Publish Docker Image
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -f Dockerfile.ui -t ${{ secrets.DOCKER_USERNAME }}/bookmark-ui-nextjs:5.0
+          docker push ${{ secrets.DOCKER_USERNAME }}/bookmark-ui-nextjs:5.0
