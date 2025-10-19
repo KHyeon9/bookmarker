@@ -3,7 +3,9 @@ services:
   # api 설정
   bookmarker-api:
     build:
+      # 디렉토리명
       context: bookmarker-api
+      # 파일명
       dockerfile: Dockerfile
     environment:
       SPRING_PROFILE_ACTIVE: docker
@@ -18,3 +20,22 @@ services:
     # 위 db랑 연결
     depends_on:
       - bookmarker-db
+    networks:
+      - bookmarker-network
+
+  # docker 내부의 SpringBoot 요청 주소 bookmark-api : service 명이 되어 있음
+  bookmarker-ui-nextjs:
+    container_name: bookmark-ui-nextjs
+    build:
+      context: bookmark-ui-nextjs
+      dockerfile: Dockerfile.ui
+    ports:
+      - "13000:3000"
+    env_file:
+      - bookmark-ui-nextjs/.env.local
+    networks:
+      - bookmarker-network
+
+networks:
+  bookmarker-network:
+    driver: bridge
