@@ -6,4 +6,4 @@ spring:
     hibernate:
       ddl-auto: update
   flyway:
-    locations: classpath:/db/migration/{vendor} # ???? ??? db ??
+    locations: classpath:/db/migration/{vendor} # 자동으로 db 설정
