@@ -1,8 +1,8 @@
 # 기본 이미지 선택, 필요한 패키지 및 설정 파일을 이미지에 복사
 FROM node:20-alpine as deps
+# Alpine에는 기본 C 라이브러리가 없을 수 있어 호환성 라이브러리 설치
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-
 COPY package.json package-lock.json ./
 # 프로덕션 환경용 의존성 설치(devDependency 제외)
 RUN npm ci --omit=dev
