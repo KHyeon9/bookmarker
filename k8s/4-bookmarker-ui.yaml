@@ -35,7 +35,7 @@ spec:
         ports:
           - containerPort: 3000
         env:
-          - name: NEXT_PUBLIC_CLIENT_SIDE_API_BASE_UR
+          - name: NEXT_PUBLIC_CLIENT_SIDE_API_BASE_URL
             value: http://localhost:18080
           - name: SERVER_SIDE_API_BASE_URL
             value: http://bookmarker-api-svc:8080
