@@ -53,8 +53,6 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-
-
 // Jib 설정
 jib {
 	to {
