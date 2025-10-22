@@ -92,4 +92,4 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -f Dockerfile.ui -t ${{ secrets.DOCKER_USERNAME }}/bookmark-ui-nextjs:5.1 .
-          docker push ${{ secrets.DOCKER_USERNAME }}/bookmark-ui-nextjs:5.0
+          docker push ${{ secrets.DOCKER_USERNAME }}/bookmark-ui-nextjs:5.1
