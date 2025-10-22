@@ -38,10 +38,7 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
-	// devtools는 prod 빌드 때 제외
-	if (!project.hasProperty("prod")) {
-		developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	}
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	// test
 	// BOM (Bill of Materials) 을 적용할 때 사용합니다.
 	// BOM은 여러 라이브러리들의 버전 일관성을 관리해주는 역할
