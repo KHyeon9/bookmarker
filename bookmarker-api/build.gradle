@@ -34,11 +34,14 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-database-postgresql'
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	// runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+	// devtools는 prod 빌드 때 제외
+	if (!project.hasProperty("prod")) {
+		developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	}
 	// test
 	// BOM (Bill of Materials) 을 적용할 때 사용합니다.
 	// BOM은 여러 라이브러리들의 버전 일관성을 관리해주는 역할
@@ -49,6 +52,9 @@ dependencies {
 	testImplementation 'org.testcontainers:postgresql'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+
+
+
 // Jib 설정
 jib {
 	to {
