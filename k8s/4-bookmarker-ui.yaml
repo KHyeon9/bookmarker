@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookmark-ui-svc
+spec:
+  ports:
+  - name: app-port-mapping
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+    nodePort: 30080
+  selector:
+    app: bookmark-ui-pod
+  type: NodePort
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookmarker-ui-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookmark-ui-pod
+  template:
+    metadata:
+      labels:
+        app: bookmark-ui-pod
+    spec:
+      containers:
+      - image: mrk0607/bookmark-ui-nextjs:5.0
+        name: bookmark-ui
+        ports:
+          - containerPort: 3000
+        env:
+          - name: NEXT_PUBLIC_CLIENT_SIDE_API_BASE_UR
+            value: http://localhost:18080
+          - name: SERVER_SIDE_API_BASE_URL
+            value: http://bookmarker-api-svc:8080

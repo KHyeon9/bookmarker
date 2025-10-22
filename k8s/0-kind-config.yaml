@@ -1,0 +1,29 @@
+# kind cluster 정의
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+
+# 클러스터에 포함될 노드 정의
+nodes:
+# control-plane 역할을 하는 노드 생성 (클러스터 관리 노드)
+- role: control-plane
+  # 외부에서 docker container (즉, 클러스터 내부 pod)에 접근할 수 있도록 port mapping
+  extraPortMappings:
+  # 일반 웹 접근용 포트 매칭(옵션)
+  - containerPort: 80 # 서버가 노출될 포트
+    hostPort: 80      # 외부에서 호출할 포트
+    protocol: TCP
+
+  # HTTPS용 포트 매핑 (외부에서 HTTPS로 접근 가능하게 설정)
+  - containerPort: 443 
+    hostPort: 443      
+    protocol: TCP
+
+  # Spring Boot API 서비스용 포트 매핑
+  - containerPort: 30090 
+    hostPort: 18080      
+    protocol: TCP
+
+  # Next.js UI Front용 포트 매핑
+  - containerPort: 30080 
+    hostPort: 30080      
+    protocol: TCP
