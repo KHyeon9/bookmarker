@@ -30,7 +30,7 @@ spec:
         app: bookmark-ui-pod
     spec:
       containers:
-      - image: mrk0607/bookmark-ui-nextjs:5.0
+      - image: mrk0607/bookmark-ui-nextjs:5.1
         name: bookmark-ui
         ports:
           - containerPort: 3000
