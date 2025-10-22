@@ -38,6 +38,7 @@ const page = () => {
     } catch (error) {
       // Promis가 reject된 경우
       setMessage('새로운 Bookmark 저장에 실패하였습니다.');
+      console.log(error);
     }
   }
 
