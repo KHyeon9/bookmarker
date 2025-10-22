@@ -21,17 +21,17 @@ const getApiUrl = () => {
 }
 
 export const fetchBookmarks = async (page : number, query ?: string):Promise<BookmarksResponse> => {
-  let apuUrl = getApiUrl();
+  let apiUrl = getApiUrl();
   // 북마크들의 정보 가져오기
-  const resp  = await axios.get<BookmarksResponse>(`${apuUrl}/api/bookmarks?page=${page}&query=${query}`);
+  const resp  = await axios.get<BookmarksResponse>(`${apiUrl}/api/bookmarks?page=${page}&query=${query}`);
 
   return resp.data;
 }
 
 export const saveBookmark = async (bookmark: { title: string, url: string }) => {
   try {
-    let apuUrl = getApiUrl();
-    const resp = await axios.post(`${apuUrl}/api/bookmarks`, bookmark);
+    let apiUrl = getApiUrl();
+    const resp = await axios.post(`${apiUrl}/api/bookmarks`, bookmark);
     return resp.data; // 성공시 응답 데이터 반환
   } catch (error) {
     // 에러가 발생한 경우 에러 메시지 처리

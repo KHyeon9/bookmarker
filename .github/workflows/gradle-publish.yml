@@ -81,8 +81,8 @@ jobs:
       # 4. env 파일 생성
       - name: Create .env.local
         run: |
-          echo "NEXT_PUBLIC_CLIENT_SIDE_API_BASE_URL=${{ secrets.NEXT_PUBLIC_CLIENT_SIDE_API_BASE_URL }}"> .env.local
-          echo "SERVER_SIDE_API_BASE_URL=${{ secrets.SERVER_SIDE_API_BASE_URL }}"> .env.local
+          echo "NEXT_PUBLIC_CLIENT_SIDE_API_BASE_URL=${{ secrets.NEXT_PUBLIC_CLIENT_SIDE_API_BASE_URL }}" > .env.local
+          echo "SERVER_SIDE_API_BASE_URL=${{ secrets.SERVER_SIDE_API_BASE_URL }}" >> .env.local
       # 4. Next.js 빌드
       - name: Build
         run: npm run build
@@ -91,5 +91,5 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile.ui -t ${{ secrets.DOCKER_USERNAME }}/bookmark-ui-nextjs:5.1 .
+          docker build -f Dockerfile.ui -t ${{ secrets.DOCKER_USERNAME }}/bookmark-ui-nextjs:5.2 .
           docker push ${{ secrets.DOCKER_USERNAME }}/bookmark-ui-nextjs:5.1
