@@ -48,7 +48,7 @@ jobs:
       - name: Build and Publish Docker Image
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          ./gradlew jib -Pprod \
+          ./gradlew jib \
             --image=${{ secrets.DOCKER_USERNAME }}/bookmarker-api:5.0 \
             -Djib.to.auth.username=${{ secrets.DOCKER_USERNAME }} \
             -Djib.to.auth.password=${{ secrets.DOCKER_PASSWORD }}
