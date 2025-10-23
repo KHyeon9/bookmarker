@@ -6,6 +6,15 @@ apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
 # control-plane 역할을 하는 노드 생성 (클러스터 관리 노드)
 - role: control-plane
+  # 이 설정을 통해 KinD 클러스터가 구성시
+  # Ingress NGINX가 설치될때, node에 ingress-ready=true 라벨을 자동으로 붙임
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true" 
+
   # 외부에서 docker container (즉, 클러스터 내부 pod)에 접근할 수 있도록 port mapping
   extraPortMappings:
   # 일반 웹 접근용 포트 매칭(옵션)
