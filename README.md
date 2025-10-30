@@ -1,5 +1,4 @@
 # Bookmarker
-설명
 Docker를 사용해 Git Action으로 CI를 해보기 위해 Bookmarker 프로젝트를 진행
 
 ## 개발환경
@@ -17,7 +16,7 @@ Docker를 사용해 Git Action으로 CI를 해보기 위해 Bookmarker 프로젝
 - Lombok
 - React + Nexy.js
 - Docker
-그외
+## 그외
 - Bootstrap5
 - Git Action
 - KinD
